@@ -13,21 +13,7 @@
     $ git clone https://github.com/tonyjih/RG350_buildroot.git
     ```
 
-3. Bajar definición de imagen en máquina host:
-
-    ```
-    $ cd ~/git
-    $ git clone https://github.com/eduardofilo/RG350_buildroot_docker.git
-    ```
-
-4. Compilar imagen en máquina host:
-
-    ```
-    $ cd ~/git/RG350_buildroot_docker
-    $ docker build -t eduardofilo/rg350_buildroot .
-    ```
-
-5. Arrancar contenedor:
+3. Arrancar contenedor:
 
     ```
     $ docker run -it -v ~/git/RG350_buildroot:/root/RG350_buildroot --name RG350_buildroot eduardofilo/rg350_buildroot
