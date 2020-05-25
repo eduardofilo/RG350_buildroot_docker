@@ -38,7 +38,6 @@
 Si se pierde la conexión conectar con contenedor con:
 
 ```
-$ docker start RG350_buildroot
 $ docker exec -it RG350_buildroot /bin/bash
 ```
 
