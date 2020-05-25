@@ -5,7 +5,7 @@ Con el siguiente procedimiento mantendremos el código y el resultado de la comp
 1. Instalar Docker en máquina host:
 
     ```
-    $ sudo apt  install docker.io
+    $ sudo apt install docker.io
     ```
 
 2. Bajar repositorio en máquina host:
