@@ -1,5 +1,7 @@
 # Creación imagen Docker y arranque de contenedor
 
+Con el siguiente procedimiento mantendremos el código y el resultado de la compilación en un directorio de la máquina host. Docker nos servirá para encapsular únicamente los binarios y librerías utilizados para la compilación de Buildroot.
+
 1. Instalar Docker en máquina host:
 
     ```
@@ -22,7 +24,7 @@
     $ docker build -t eduardofilo/rg350_buildroot .
     ```
 
-4. Arrancar contenedor:
+4. Arrancar contenedor pasando el directorio del repositorio (punto 2) como volumen:
 
     ```
     $ docker run -it -v ~/git/RG350_buildroot:/root/RG350_buildroot --name RG350_buildroot eduardofilo/rg350_buildroot
