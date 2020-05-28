@@ -8,8 +8,8 @@ MAINTAINER Eduardo Moreno
 ENV DEBIAN_FRONTEND noninteractive
 
 # Directorio de trabajo
-RUN mkdir /root/RG350_buildroot
-WORKDIR /root/RG350_buildroot
+RUN mkdir /root/git
+WORKDIR /root/git
 
 #Fijamos la zona horaria a nivel contendor.
 ENV TZ=Europe/Madrid
