@@ -36,7 +36,7 @@ $ cd ~/git/RG350_buildroot_docker
 $ docker build -t eduardofilo/rg350_buildroot .
 ```
 
-Tras ejecutar el paso 3 debería quedar un prompt ejecutándose desde el entorno Debian dentro del contenedor. Como hemos conectado el directorio `/root/RG350_buildroot` del contenedor con el directorio `~/git/RG350_buildroot` de nuestra máquina, cualquier cosa que queramos modificar o recoger al final de la compilación, la podremos localizar desde cualquier explorador de archivos de nuestra máquina. Si en algún momento perdiéramos de vista la terminal ejecutándose en el entorno del contenedor, podremos recuperarla ejecutando:
+Tras ejecutar el paso 3 debería quedar un prompt ejecutándose desde el entorno Debian dentro del contenedor. Como hemos conectado el directorio `/root/git` del contenedor con el directorio `~/git` de nuestra máquina, cualquier cosa que queramos modificar o recoger al final de la compilación, la podremos localizar desde cualquier explorador de archivos de nuestra máquina. Si en algún momento perdiéramos de vista la terminal ejecutándose en el entorno del contenedor, podremos recuperarla ejecutando:
 
 ```
 $ docker exec -it RG350_buildroot /bin/bash
