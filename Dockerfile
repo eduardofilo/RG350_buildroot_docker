@@ -18,8 +18,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Actualización imágen de sistema
 RUN apt-get update && apt-get -y -o Dpkg::Options::="--force-confold" upgrade
 
-# Instalación de paquetes necesarios para correr la aplicación
+# Instalación de paquetes necesarios para compilar Buildroot
 RUN apt-get install -y git build-essential wget cpio python python3 unzip bc mercurial subversion gcc-multilib vim ccache squashfs-tools zip gettext mtools dosfstools libncurses5-dev
+
+# Instalación de paquetes interesantes para compilar aplicaciones para el entorno de la RG350
+RUN apt-get install -y cmake
 
 # Configuración de locales
 #RUN locale-gen es_ES.UTF-8
