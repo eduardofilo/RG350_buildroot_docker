@@ -24,6 +24,9 @@ RUN apt-get install -y git build-essential wget cpio python python3 unzip bc mer
 # Instalación de paquetes interesantes para compilar aplicaciones para el entorno de la RG350
 RUN apt-get install -y cmake
 
+# Agregamos al PATH la ruta del toolchain para cuando lo hayamos generado en /root/git/RG350_buildroot/output/host
+ENV PATH="/root/git/RG350_buildroot/output/host/usr/bin:$PATH"
+
 # Configuración de locales
 #RUN locale-gen es_ES.UTF-8
 #RUN update-locale LANG="es_ES.UTF-8" LANGUAGE="es_ES"
