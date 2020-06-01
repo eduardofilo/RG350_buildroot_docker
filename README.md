@@ -105,6 +105,6 @@ The entire compilation process generates about 12GB of files.
 |:--------------|:--------|
 |`docker container ls -a`|List all containers. Use to get container hash.|
 |`docker container start <hash>`|Start container.|
-|`docker exec -it RG350_buildroot /bin/bash`|Get bash prompt in container.|
+|`docker exec -it <hash> /bin/bash`|Get bash prompt in container.|
 |`docker container stop <hash>`|Stop container.|
 |`docker container rm <hash>`|Remove container.|
