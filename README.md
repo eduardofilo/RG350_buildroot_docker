@@ -1,10 +1,15 @@
-# Creación imagen Docker y arranque de contenedor
+# Docker image to compile RG350 Buildroot and Toolchain
 
-Artículo con más detalles [aquí](http://apuntes.eduardofilo.es/2020-05-25-rg350_docker_buildroot.html).
+Docker image, based in Debian Stretch, for building Buildroot for RG350 without altering our host machine.
 
-Con el siguiente procedimiento mantendremos el código y el resultado de la compilación en un directorio de la máquina host. Docker nos servirá para encapsular únicamente los binarios y librerías utilizados para la compilación de Buildroot.
+## Links
 
-1. Instalar Docker en máquina host:
+* [Detailed post (in spanish)](http://apuntes.eduardofilo.es/2020-05-25-rg350_docker_buildroot.html).
+* [Dockerfile](https://github.com/eduardofilo/RG350_buildroot_docker)
+
+## Docker container start up
+
+1. Install Docker in host machine:
 
     ```
     $ sudo apt install docker.io
@@ -14,52 +19,45 @@ Con el siguiente procedimiento mantendremos el código y el resultado de la comp
     $ sudo systemctl start docker
     ```
 
-2. Bajar repositorio en máquina host. Con los siguientes comandos quedará en `~/git/RG350_buildroot`:
+2. Download buildroot repository to host machine:
 
     ```
     $ cd ~/git
     $ git clone https://github.com/tonyjih/RG350_buildroot.git
     ```
 
-3. Arrancar contenedor pasando el directorio del repositorio del punto anterior como volumen:
+3. Run container:
 
     ```
     $ docker run -it -v ~/git:/root/git --name RG350_buildroot eduardofilo/rg350_buildroot
     ```
 
-Si en lugar de utilizar la versión compilada subida al [Docker Hub](https://hub.docker.com/r/eduardofilo/rg350_buildroot) queremos construirlo en local (por si quisiéramos hacer alguna modificación en el Dockerfile), intercalaríamos los siguientes comandos entre los pasos 2 y 3 anteriores:
+## Container connection
 
-```
-$ cd ~/git
-$ git clone https://github.com/eduardofilo/RG350_buildroot_docker.git
-$ cd ~/git/RG350_buildroot_docker
-$ docker build -t eduardofilo/rg350_buildroot .
-```
-
-Tras ejecutar el paso 3 debería quedar un prompt ejecutándose desde el entorno Debian dentro del contenedor. Como hemos conectado el directorio `/root/git` del contenedor con el directorio `~/git` de nuestra máquina, cualquier cosa que queramos modificar o recoger al final de la compilación, la podremos localizar desde cualquier explorador de archivos de nuestra máquina. Si en algún momento perdiéramos de vista la terminal ejecutándose en el entorno del contenedor, podremos recuperarla ejecutando:
+Once created, we can connect with container with:
 
 ```
 $ docker exec -it RG350_buildroot /bin/bash
 ```
 
-Si el comando anterior devuelve un error indicando que el contenedor está parado, podemos arrancarlo antes ejecutando la orden:
+If previous command returns an error indicating that the container is stopped, we can start it before executing the command:
 
 ```
 $ docker start RG350_buildroot
 ```
 
-# Operación de Buildroot
+## Working with RG350 Buildroot
 
-Una vez que tenemos preparado el entorno podremos realizar las tareas y compilaciones previstas en el mismo. Por ejemplo en el entorno preparado por [Tonyjih](https://github.com/tonyjih/RG350_buildroot) vemos que podemos realizar las siguientes operaciones (las líneas de terminal siguientes están precedidas por `#` y no por `$` como antes porque se refieren al terminal dentro del contenedor, que se ejecuta con el usuario root del mismo):
+Once we are in container terminal, these are the things that can be done:
 
-* Configurar Buildroot (sólo es necesario la primera vez):
+* To config Buildroot (only necessary first time):
 
     ```
     # cd ~/git/RG350_buildroot
     # make rg350_defconfig BR2_EXTERNAL=board/opendingux
     ```
 
-* **OPCIONAL**. Para personalizar alguna opción de Buildroot, utilizar uno de los dos comandos siguientes (sólo uno):
+* OPTIONAL. We can personalize Buildroot with one of this command (use one or the other):
 
     ```
     # cd ~/git/RG350_buildroot
@@ -67,7 +65,7 @@ Una vez que tenemos preparado el entorno podremos realizar las tareas y compilac
     # make nconfig
     ```
 
-* Compilar el toolchain (sólo es necesario una vez; tarda 1h50m en un Intel i3-4005U):
+* To build toolchain (only necessary first time):
 
     ```
     # cd ~/git/RG350_buildroot
@@ -75,7 +73,7 @@ Una vez que tenemos preparado el entorno podremos realizar las tareas y compilac
     # make toolchain
     ```
 
-* Compilar una librería o paquete. Por ejemplo para compilar SDL y SDL_Image:
+* To build particular libraries and packages, for example to build SDL and SDL_Image:
 
     ```
     # cd ~/git/RG350_buildroot
@@ -83,25 +81,30 @@ Una vez que tenemos preparado el entorno podremos realizar las tareas y compilac
     # make sdl sdl_image
     ```
 
-
-* Si se quiere que la imagen incluya emuladores y aplicaciones, ejecutar antes lo siguiente (sólo es necesario hacerlo una vez):
+* OPTIONAL. If you want to include a set of default applications, emulators, and games from various sources, run this command (you only need to do this once):
 
     ```
     # cd ~/git/RG350_buildroot
     # board/opendingux/gcw0/download_local_pack.sh
     ```
 
-* Compilación de imagen para flashear en SD (el fichero con la imagen resultante queda en `~/git/RG350_buildroot/output/images/od-imager/images/sd_image.bin` en la máquina host):
+* To build the OS image, run:
 
     ```
     # cd ~/git/RG350_buildroot
     # board/opendingux/gcw0/make_initial_image.sh
     ```
 
-Todo el proceso de compilación genera unos 12GBs de archivos.
+The image will saved to: `~/git/RG350_buildroot/output/images/od-imager/images/sd_image.bin`
 
-# Comandos para gestionar contenedores
+The entire compilation process generates about 12GB of files.
 
-* `docker container ls -a`: Listar contenedores. Para averiguar hash por ejemplo.
-* `docker container stop <hash>`: Detener contenedor.
-* `docker container rm <hash>`: Borra contenedor.
+## Commands to manage containers
+
+|Command|Effect|
+|:--------------|:--------|
+|`docker container ls -a`|List all containers. Use to get container hash.|
+|`docker container start <hash>`|Start container.|
+|`docker exec -it RG350_buildroot /bin/bash`|Get bash prompt in container.|
+|`docker container stop <hash>`|Stop container.|
+|`docker container rm <hash>`|Remove container.|
